@@ -1,91 +1,212 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+// QUERY API PAGE
+import { useState, useEffect } from "react";
+import { useFavorites } from "./contexts/FavoritesContext";
+import FormQuery from "./components/FormQuery";
+import RecipeList from "./components/RecipeList";
+
+export default function QueryPage() {
+	// INIT STATES FOR QUERYING
+	const [recipes, setRecipes] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(null);
+	const [offset, setOffset] = useState(0);
+	const [totalResults, setTotalResults] = useState(0);
+	const [hasMore, setHasMore] = useState(false);
+	const [currentQuery, setCurrentQuery] = useState(null);
+
+	// USE THE FAVORITES CONTEXT
+	const { favorites, addToFavorites, removeFromFavorites } = useFavorites();
+
+	// HANDLE RECEPIES SEARCH
+	const searchRecipes = async (queryParams, isLoadMore = false) => {
+		// WIP - LOAD MORE BUTTON
+		console.log("RUNNING SEARCH RECIPES");
+
+		// UPDATE THE STATE VARS
+		setLoading(true);
+		setError(null);
+
+		// BEGIN
+		try {
+			// GET THE KEY FROM THE ENV FILE
+			// NOTE - LOCAL DEV HAS THEIR OWN FILE
+			// NOTE - ONLY KEYS PREFIXED WITH NEXT_PUBLIC ARE AVAIL TO THE WEB/CLIENT SIDE
+			const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+			console.log("ENV API_KEY[" + process.env.NEXT_PUBLIC_API_KEY + "]");
+			console.log("USING APIKEY[" + apiKey + "]");
+
+			// UPDATE THE SEARCHOFFSET
+			const searchOffset = isLoadMore ? offset : 0;
+
+			// MAKE THE URL BASE
+			var url = "https://api.apilayer.com/spoonacular";
+
+			// MAKE THE QUERY STRING
+			var query_str = "";
+
+			// ADD THE ENDPOINT
+			url += "/recipes/complexSearch?";
+
+			// WIP - ENFORRCING THE FORM NUMBER
+
+			const MAX_QUERY_NUMBER = 6;
+			queryParams.number = MAX_QUERY_NUMBER;
+			queryParams.offset = searchOffset;
+
+			// WIP - ADD THE QUERY VALS TO THE URL
+			console.log("QUERY PARAMS OBJ FROM THE FORM");
+			console.log(queryParams);
+
+			// MAKE SEARCH PARAMS OBJ
+			const searchParams = new URLSearchParams({
+				...queryParams,
+			});
+
+			// MAKE QUERY STRING
+			var query_str = searchParams.toString();
+			console.log("USING QUERY STRING[" + query_str + "]");
+
+			// ADD QUERY TO URL
+			url += query_str;
+			console.log("USING URL[" + url + "]");
+
+			// NOTE BEFORE THE FETCH
+			var startTime = Date.now();
+			console.log("[" + Date.now().toString() + "] FETCH STARTED");
+
+			// V2DO - SPINNER?
+
+			// AWAIT THE RESPONSE DIRECT, FRONTEND
+
+			const response = await fetch(url, {
+				headers: {
+					apikey: apiKey,
+				},
+			});
+
+			// USE LU BACKEND
+			// const response = await fetchData(query_str);
+			console.log(response.headers);
+
+			// TIME
+			var endTime = Date.now();
+			var duration = endTime - startTime;
+			console.log("[" + Date.now().toString() + "] FETCH FINISHED IN (" + duration + "ms)");
+
+			// EVAL THE RESPONSE
+			if (!response.ok) {
+				console.log("REPONSE NOT OK!![" + response.status + "]");
+				throw new Error("Failed to fetch recipes " + response.statusText);
+			}
+
+			// GET THE DATA
+			const data = await response.json();
+
+			// HANDLE IF QUERY WAS FROM LOADMORE
+			// NOTE - CHANGE OF QUERY, RESETS
+			if (isLoadMore) {
+				setRecipes((prev) => [...prev, ...data.results]);
+			} else {
+				setRecipes(data.results);
+				setOffset(0);
+			}
+
+			// UPDATE VALS
+			setTotalResults(data.totalResults);
+
+			// DUMP TOTAL TO CONSOLE
+			console.log("TOTAL RESULTS[" + data.totalResults + "]");
+
+			// WIP - MUST FIX
+			setHasMore(data.results.length === MAX_QUERY_NUMBER && searchOffset + MAX_QUERY_NUMBER < data.totalResults);
+
+			setOffset(searchOffset + data.results.length);
+			setCurrentQuery(queryParams);
+		} catch (err) {
+			setError(err.message);
+			console.error("Error fetching recipes:", err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const loadMoreRecipes = () => {
+		if (currentQuery && hasMore && !loading) {
+			searchRecipes(currentQuery, true);
+		}
+	};
+
+	const handleToggleFavorite = (recipe) => {
+		const isFavorite = favorites.some((fav) => fav.id === recipe.id);
+		if (isFavorite) {
+			removeFromFavorites(recipe.id);
+		} else {
+			addToFavorites(recipe);
+		}
+	};
+
 	return (
-		<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-				<Image
-					className="dark:invert"
-					src="/next.svg"
-					alt="Next.js logo"
-					width={180}
-					height={38}
-					priority
-				/>
-				
-				<div className="flex gap-4 items-center flex-col sm:flex-row">
-					<a
-						className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-						href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<Image
-							className="dark:invert"
-							src="/vercel.svg"
-							alt="Vercel logomark"
-							width={20}
-							height={20}
-						/>
-						Deploy now
-					</a>
-					<a
-						className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-						href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Read our docs
-					</a>
+		<div className="min-h-screen bg-gray-50">
+			<div className="container mx-auto px-4 py-8">
+				<header className="text-center mb-8">
+					<h1 className="text-4xl font-bold text-gray-800 mb-2">Recipe Finder</h1>
+					<p className="text-gray-600">Discover delicious recipes tailored to your preferences</p>
+				</header>
+
+				{/* Search Form */}
+				<div className="bg-white rounded-lg shadow-md p-6 mb-8">
+					<FormQuery
+						onSearch={searchRecipes}
+						loading={loading}
+					/>
 				</div>
-			</main>
-			<footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image
-						aria-hidden
-						src="/file.svg"
-						alt="File icon"
-						width={16}
-						height={16}
-					/>
-					Learn
-				</a>
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image
-						aria-hidden
-						src="/window.svg"
-						alt="Window icon"
-						width={16}
-						height={16}
-					/>
-					Examples
-				</a>
-				<a
-					className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-					href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image
-						aria-hidden
-						src="/globe.svg"
-						alt="Globe icon"
-						width={16}
-						height={16}
-					/>
-					Go to nextjs.org →
-				</a>
-			</footer>
+
+				{/* Error Display */}
+				{error && (
+					<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+						<strong>Error:</strong> {error}
+					</div>
+				)}
+
+				{/* Results Summary */}
+				{totalResults > 0 && (
+					<div className="mb-6">
+						<p className="text-gray-600">
+							Found {totalResults} recipes. Showing {recipes.length} results.
+						</p>
+					</div>
+				)}
+
+				{/* Recipe List */}
+				<RecipeList
+					recipes={recipes}
+					favorites={favorites}
+					onToggleFavorite={handleToggleFavorite}
+					showFavoriteButton={true}
+				/>
+
+				{/* Load More Button */}
+				{hasMore && (
+					<div className="text-center mt-8">
+						<button
+							onClick={loadMoreRecipes}
+							disabled={loading}
+							className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+						>
+							{loading ? "Loading..." : "Load More Recipes"}
+						</button>
+					</div>
+				)}
+
+				{/* No Results */}
+				{!loading && recipes.length === 0 && currentQuery && (
+					<div className="text-center py-12">
+						<p className="text-gray-500 text-lg">No recipes found. Try adjusting your search criteria.</p>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }
