@@ -43,19 +43,19 @@ export default function QueryPage() {
 			// MAKE THE URL BASE
 			var url = "https://api.apilayer.com/spoonacular";
 
-			// MAKE THE QUERY STRING
-			var query_str = "";
-
 			// ADD THE ENDPOINT
 			url += "/recipes/complexSearch?";
 
-			// WIP - ENFORRCING THE FORM NUMBER
+			// MAKE THE QUERY STRING
+			var query_str = "";
 
+			// ENFORCE MAX RETURN AND CURRENT OFFSET
+			// NOTE - API DEFAULT IS SUPPOSED TO BE 10, BUT I DON'T TRUST IT
 			const MAX_QUERY_NUMBER = 6;
 			queryParams.number = MAX_QUERY_NUMBER;
 			queryParams.offset = searchOffset;
 
-			// WIP - ADD THE QUERY VALS TO THE URL
+			// ADD THE QUERY VALS TO THE URL
 			console.log("QUERY PARAMS OBJ FROM THE FORM");
 			console.log(queryParams);
 
@@ -79,15 +79,13 @@ export default function QueryPage() {
 			// V2DO - SPINNER?
 
 			// AWAIT THE RESPONSE DIRECT, FRONTEND
-
 			const response = await fetch(url, {
 				headers: {
 					apikey: apiKey,
 				},
 			});
 
-			// USE LU BACKEND
-			// const response = await fetchData(query_str);
+			// DUMP THE HEADERS
 			console.log(response.headers);
 
 			// TIME
@@ -119,10 +117,13 @@ export default function QueryPage() {
 			// DUMP TOTAL TO CONSOLE
 			console.log("TOTAL RESULTS[" + data.totalResults + "]");
 
-			// WIP - MUST FIX
+			// UPDATE VIZ OF HAS MORE BUTTON
 			setHasMore(data.results.length === MAX_QUERY_NUMBER && searchOffset + MAX_QUERY_NUMBER < data.totalResults);
 
+			// UPDATE THE OFFSET STATE VAR VALUE
 			setOffset(searchOffset + data.results.length);
+
+			// UPDAT THE FORM QUERY PARAMS
 			setCurrentQuery(queryParams);
 		} catch (err) {
 			setError(err.message);
@@ -132,14 +133,19 @@ export default function QueryPage() {
 		}
 	};
 
+	// LOAD MORE RECIPES BUTTON AT BOTTOM OF RESULTS
 	const loadMoreRecipes = () => {
 		if (currentQuery && hasMore && !loading) {
 			searchRecipes(currentQuery, true);
 		}
 	};
 
+	// HANDLE THE FAVORITES TOGGLE LOGIC
 	const handleToggleFavorite = (recipe) => {
+		// DETERMIME IF RECIPE IS FAVORITE IF favorites context HAS ANY MATCHING ID
 		const isFavorite = favorites.some((fav) => fav.id === recipe.id);
+
+		// UPDATE RECIPE FAVORITE STATE & BUTTON VIZ
 		if (isFavorite) {
 			removeFromFavorites(recipe.id);
 		} else {
@@ -147,6 +153,7 @@ export default function QueryPage() {
 		}
 	};
 
+	// RETURN THE PAGE
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<div className="container mx-auto px-4 py-8">
