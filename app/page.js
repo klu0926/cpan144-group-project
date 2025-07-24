@@ -54,6 +54,10 @@ export default function QueryPage() {
 			const MAX_QUERY_NUMBER = 6;
 			queryParams.number = MAX_QUERY_NUMBER;
 			queryParams.offset = searchOffset;
+			queryParams.addRecipeInformation = true;
+			queryParams.instructionsRequired = true;
+			queryParams.addRecipeNutrition = true;
+			queryParams.fillIngredients = true;
 
 			// ADD THE QUERY VALS TO THE URL
 			console.log("QUERY PARAMS OBJ FROM THE FORM");
