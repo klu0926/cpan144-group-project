@@ -140,7 +140,7 @@ export default function FormQuery({ onSearch, loading }) {
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="space-y-6"
+			className="space-y-6 dark:text-black"
 		>
 			<div className="text-center mb-6">
 				<h2 className="text-xl font-semibold text-gray-800 mb-2">Find Your Perfect Recipe</h2>
