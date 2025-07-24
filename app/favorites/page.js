@@ -163,7 +163,7 @@ export default function FavoritesPage() {
               recipes={filteredRecipes}
               favorites={favorites}
               onToggleFavorite={handleRemoveFavorite}
-              showFavoriteButton={false}
+              showFavoriteButton={true}
               showCookingModal={true}
             />
 
