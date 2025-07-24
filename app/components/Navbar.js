@@ -16,9 +16,8 @@ function NavLink({ href, isActive, children }) {
 
 export default function Navbar() {
   const pathname = usePathname();
-
   return (
-    <div className="flex gap-3 py-3 px-10 bg-gray-500">
+    <div className="flex gap-3 py-3 px-10 bg-blue-400">
       <NavLink href={'/'} isActive={pathname == '/'}>Home</NavLink>
       <NavLink href={'/favorites'} isActive={pathname === '/favorites'}>Favorites</NavLink>
     </div>
