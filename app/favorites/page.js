@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useFavorites } from '../contexts/FavoritesContext';
 import FormFavorites from '../components/FormFavorites';
 import RecipeList from '../components/RecipeList';
+import Link from 'next/link';
 
 export default function FavoritesPage() {
   const { favorites, removeFromFavorites } = useFavorites();
@@ -121,12 +122,12 @@ export default function FavoritesPage() {
             <p className="text-gray-500 mb-6">
               Start exploring recipes and save your favorites to see them here!
             </p>
-            <a
-              href="/query"
+            <Link
+              href="/"
               className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
             >
               Discover Recipes
-            </a>
+            </Link>
           </div>
         ) : (
           <>
