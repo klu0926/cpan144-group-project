@@ -5,7 +5,7 @@ import HoverCard from "../components/HoverCard"
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10">
-      <h1 className="text-3xl font-bold mb-8">Meet the Team</h1>
+      <h1 className="text-gray-500 text-3xl font-bold mb-8">Meet the Team</h1>
       <div className="flex flex-wrap justify-center gap-8">
         <HoverCard
           name={"Darryl Lecraw"}

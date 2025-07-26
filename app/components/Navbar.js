@@ -20,6 +20,7 @@ export default function Navbar() {
     <div className="flex gap-3 py-3 px-10 bg-blue-400">
       <NavLink href={'/'} isActive={pathname == '/'}>Home</NavLink>
       <NavLink href={'/favorites'} isActive={pathname === '/favorites'}>Favorites</NavLink>
+      <NavLink href={'/about'} isActive={pathname === '/about'}>About Us</NavLink>
     </div>
   )
 }

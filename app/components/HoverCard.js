@@ -7,7 +7,7 @@ export default function HoverCard({ image, name, description, githublink }) {
       <div className="relative w-full h-full transition-transform duration-[1000ms] [transform-style:preserve-3d] group-hover:rotate-y-180">
         {/* Front Side */}
         <div className="bg-blue-300 absolute w-full h-full rounded-xl px-6 py-4 backface-hidden bg-cover bg-center flex flex-col justify-end text-white">
-          <img src={image}></img>
+          <img className="rounded-xl" src={image}></img>
           <h2 className="text-xl font-medium mb-2">{name}</h2>
           <button className="w-[120px] border border-white rounded-full py-2 px-5 hover:bg-white hover:text-black transition">
             Hover
