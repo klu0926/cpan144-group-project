@@ -17,7 +17,7 @@ export default function HoverCard({ image, name, description, githublink }) {
         {/* Back Side */}
         <div className="absolute w-full h-full rounded-xl px-6 py-4 backface-hidden rotate-y-180 bg-blue-200 text-white">
           <h2 className="text-2xl font-semibold mb-1">{name}</h2>
-          <p classNdescriptioname="text-sm mb-4">
+          <p className="text-sm mb-4">
             {description}
           </p>
 
