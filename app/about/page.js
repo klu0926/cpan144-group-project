@@ -10,7 +10,7 @@ export default function AboutPage() {
         <HoverCard
           name={"Darryl Lecraw"}
           image={"https://avatars.githubusercontent.com/u/6304758?v=4"}
-          description={"bio for Darryl"}
+          description={"Bio for Darryl"}
           githublink={"https://github.com/BossClaw"} />
         <HoverCard
           name={"Clarance Leung"}
@@ -30,7 +30,7 @@ export default function AboutPage() {
         <HoverCard
           name={"Jasmine Sanders"}
           image={"https://avatars.githubusercontent.com/u/172424810?v=4"}
-          description={"Blah blah blah"}
+          description={"Bio for Jasmine"}
           githublink={"https://github.com/Jaysandja3y"}
         />
       </div>
