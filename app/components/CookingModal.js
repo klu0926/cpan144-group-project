@@ -1,10 +1,13 @@
 // components/CookingModal.js
 import { useState, useEffect } from 'react';
-
+//main modal component for displaying recipe details
 export default function CookingModal({ recipe, isOpen, onClose }) {
+  //tracking active tab
   const [activeTab, setActiveTab] = useState('ingredients');
+  //tracking checked off ingredients
   const [checkedIngredients, setCheckedIngredients] = useState({});
 
+  //Lock background scrol when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -16,14 +19,14 @@ export default function CookingModal({ recipe, isOpen, onClose }) {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
-
+//toggle checkbox state for an ingredient
   const handleIngredientCheck = (index) => {
     setCheckedIngredients(prev => ({
       ...prev,
       [index]: !prev[index]
     }));
   };
-
+// convert total minutes into a readable time (hours,minutes,seconds
   const formatTime = (minutes) => {
     if (!minutes) return 'N/A';
     if (minutes < 60) return `${minutes} min`;

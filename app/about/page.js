@@ -1,7 +1,7 @@
-"use client"
+"use client" //client side rendering
 
 import HoverCard from "../components/HoverCard"
-
+// main components on about page
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10">

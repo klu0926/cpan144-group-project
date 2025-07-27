@@ -1,6 +1,6 @@
 // FORM FOR THE API QUERY
 import { useState } from "react";
-
+// Componenet to filter recipes based on criteria
 export default function FormQuery({ onSearch, loading }) {
 	// BASE FORM OPTIONS
 	const [formData, setFormData] = useState({

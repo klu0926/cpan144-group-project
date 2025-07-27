@@ -1,5 +1,5 @@
 "use client";
-
+// Reusable card component that flips over to show more info
 export default function HoverCard({ image, name, description, githublink }) {
   return (
     <div className="w-[280px] h-[400px] perspective-[1000px] group mx-auto">
