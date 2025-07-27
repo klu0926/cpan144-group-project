@@ -8,7 +8,7 @@ export default function FormFavorites({ onFilter, totalRecipes, filteredCount })
     includeIngredients: '',
     sortBy: ''
   });
-
+//state for diet checkboxes
   const [dietFilters, setDietFilters] = useState({
     vegetarian: false,
     vegan: false,
@@ -16,9 +16,9 @@ export default function FormFavorites({ onFilter, totalRecipes, filteredCount })
     dairyFree: false,
     ketogenic: false
   });
-
+//controls visibility of filters
   const [isExpanded, setIsExpanded] = useState(false);
-
+//dropdown options
   const cuisineOptions = [
     'African', 'American', 'British', 'Cajun', 'Caribbean', 'Chinese',
     'Eastern European', 'European', 'French', 'German', 'Greek', 'Indian',
@@ -62,7 +62,7 @@ export default function FormFavorites({ onFilter, totalRecipes, filteredCount })
     setDietFilters(newDietFilters);
     applyFilters(formData, newDietFilters);
   };
-
+// Combine and send all filters back to parent from onFilter
   const applyFilters = (formFilters, dietaryFilters) => {
     const filters = {
       ...formFilters,
@@ -73,7 +73,7 @@ export default function FormFavorites({ onFilter, totalRecipes, filteredCount })
     
     onFilter(filters);
   };
-
+// Reset all filter states
   const handleReset = () => {
     const resetFormData = {
       cuisine: 'all',
@@ -94,7 +94,7 @@ export default function FormFavorites({ onFilter, totalRecipes, filteredCount })
     setDietFilters(resetDietFilters);
     applyFilters(resetFormData, resetDietFilters);
   };
-
+//check to see if filters are active
   const hasActiveFilters = () => {
     return formData.cuisine !== 'all' ||
            formData.maxReadyTime !== '' ||
