@@ -20,7 +20,9 @@ export default function AboutPage() {
         <HoverCard
           name={"Kuo Yu Lu"}
           image={"https://avatars.githubusercontent.com/u/106499794?v=4"}
-          description={"Bio for Lu"}
+          description={`
+            Former cinematic wizard turned code-slinging web dev. Built over 100 epic battle cutscenes. now battles bugs in JavaScript. Part-time SQL whisperer, full-time front-end sorcerer. Can debug faster than you can say “unexpected token.” Studying law, psychology, and car resale all at once because… why not? Dreams in Tailwind CSS and occasionally in APA 7 format.
+            `}
           githublink={"https://github.com/klu0926"} />
         <HoverCard
           name={"Noah Park"}
